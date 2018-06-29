@@ -146,8 +146,6 @@ open class AlertController: UIViewController {
         preferredStyle: AlertControllerStyle = .alert)
     {
         self.init(preferredStyle: preferredStyle)
-        self.preferredStyle = preferredStyle
-        self.commonInit()
 
         self.attributedTitle = attributedTitle
         self.attributedMessage = attributedMessage
@@ -163,14 +161,16 @@ open class AlertController: UIViewController {
     @objc
     public convenience init(title: String?, message: String?, preferredStyle: AlertControllerStyle = .alert) {
         self.init(preferredStyle: preferredStyle)
-        self.preferredStyle = preferredStyle
-        self.commonInit()
 
         self.title = title
         self.message = message
     }
 
-    private init(preferredStyle: AlertControllerStyle) {
+    /// Designated initializer
+    ///
+    /// - parameter preferredStyle: The preferred presentation style of the alert.
+    @objc
+    public init(preferredStyle: AlertControllerStyle) {
         switch preferredStyle {
         case .alert:
             self.alert = AlertView()
@@ -186,13 +186,8 @@ open class AlertController: UIViewController {
         }
 
         super.init(nibName: nil, bundle: nil)
-    }
 
-    public required init?(coder aDecoder: NSCoder) {
-        preconditionFailure("Please use one of the provided AlertController initializers")
-    }
-
-    private func commonInit() {
+        self.preferredStyle = preferredStyle
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = self.transitionDelegate
 
@@ -201,6 +196,10 @@ open class AlertController: UIViewController {
                                        action: #selector(self.handleHardwareReturnKey))
             self.addKeyCommand(command)
         }
+    }
+
+    public required init?(coder aDecoder: NSCoder) {
+        preconditionFailure("Please use one of the provided AlertController initializers")
     }
 
     // MARK: - Public
